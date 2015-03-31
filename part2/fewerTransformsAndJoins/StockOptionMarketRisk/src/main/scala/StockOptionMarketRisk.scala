@@ -25,7 +25,7 @@ object StockOptionMarketRisk {
 
     // use transform to join RDD to DStream
     val idPricesValulationInfoNested = stockPrices.transform(
-      (x: rdd.RDD[(Int, Double)]) => x.join(stockIdVolOptions))
+      (x: org.apache.spark.rdd.RDD[(Int, Double)]) => x.join(stockIdVolOptions))
 
     // change key from instrumentID of stock to that of options and
     // collect valuation paramaters
@@ -74,8 +74,9 @@ object StockOptionMarketRisk {
 
   private def createStreamContext(batchInterval : Int) = {
     val sparkConf = new SparkConf().setAppName("StockOptionMarketRisk")
+    sparkConf.setMaster("local[4]") 
     val ssc = new StreamingContext(sparkConf, Milliseconds(batchInterval))
-    ssc.checkpoint("./checkpoints") 
+    ssc.checkpoint("./checkpoints")
     ssc
   }
 
@@ -89,6 +90,8 @@ object StockOptionMarketRisk {
       idAndPriceStrs.map(x => (x(0).toInt, x(1).toDouble))
     // better done with window operation
     idAndPricesStream.updateStateByKey[Double](dropOldForFirstNewPrice)
+    idAndPricesStream.print()
+    idAndPricesStream
   }
 
   private def createStaticInstrumentData(sc : SparkContext) = {
@@ -107,6 +110,9 @@ object StockOptionMarketRisk {
       (4, StockOption(401, 1.00, 100.0, Call()))))
 
     // (id, (volatility, StockOption))
-    stockIdAndVolatility.join(stockIdAndOptionParam)
+    var stockIdAndVolOption = stockIdAndVolatility.join(stockIdAndOptionParam)
+    
+    println(stockIdAndVolOption.toDebugString)
+    stockIdAndVolOption
   }
 }
