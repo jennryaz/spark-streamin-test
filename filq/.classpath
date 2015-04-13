@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/scala"/>
+	<classpathentry kind="src" path="src/test/scala">
+		<attributes>
+			<attribute name="ignore_optional_problems" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/jennryaz/spark-1.3.0/core/target/spark-core_2.11-1.3.0-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/jennryaz/spark-1.3.0/assembly/target/scala-2.11/spark-assembly-1.3.0-hadoop2.4.0.jar"/>
+	<classpathentry kind="lib" path="/Users/jennryaz/spark-streaming-test/filq/scalatest_2.11-2.2.4.jar"/>
+	<classpathentry kind="lib" path="/Users/jennryaz/spark-streaming-test/filq/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="/Users/jennryaz/spark-streaming-test/filq/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
