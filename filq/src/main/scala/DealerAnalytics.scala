@@ -32,13 +32,16 @@ object DealerAnalytics {
     
     val dlrSecIvlCounts = quoteStream        
         .map(s => (s.dealer+s.securityId, 1))
+    dlrSecIvlCounts.print()
         
-        .reduceByKeyAndWindow(_ + _, _ - _, Seconds(60 * 1), Seconds(9))        
+    val dlrSecIvlAggr = dlrSecIvlCounts.reduceByKeyAndWindow(_ + _, _ - _, Seconds(60 * 1), Seconds(9))        
     dlrSecIvlCounts.print() 
-/*    
-    val historicCount = quoteStream.updateStateByKey[Int]{(newValues: Seq[Int], runningCount: Option[Int]) => 
-        Some(newValues.sum + runningCount.getOrElse(0))
-    }
+    
+    val historicCount = dlrSecIvlAggr.updateStateByKey[Int]{(newValues: Seq[Int], runningCount: Option[Int]) => 
+        Some(newValues.sum + runningCount.getOrElse(0))}
+    historicCount.print()
+
+    /*
     val dlrSecHistCounts = histData
         .map(s => (s._1._1.dealer+s._1._1.securityId, 1))
         .transform{ rdd => rdd.union(defaultRdd)}.reduceByKey( _+_ )
